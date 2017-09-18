@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-In [7]:
 
 class Clock:
     hour = 0
@@ -32,8 +31,7 @@ class Clock:
         else:
             return (Clock.h_angle - Clock.m_angle)
     #This will return the smallest angle between the hour hand and the minute hand
-In [8]:
-
+    
 #this reads the text file as a table and pulls it into a pandas dataframe
 times_str = pd.read_table('input.txt', delimiter=':', names=['hour', 'minute'])
 #initializes a Clock object
@@ -42,16 +40,16 @@ angle = Clock(12, 0)
 f = open('output.txt', 'w')
 #converts the dataframe to numbers instead of strings
 times = times_str.convert_objects(convert_numeric=True)
-/home/knil/anaconda3/lib/python3.5/site-packages/ipykernel/__main__.py:8: FutureWarning: convert_objects is deprecated.  Use the data-type specific converters pd.to_datetime, pd.to_timedelta and pd.to_numeric.
-In [9]:
 
 for i in times.itertuples():
-    
     #check to ensure a number was inputted
     if (np.isnan(i.hour) or np.isnan(i.minute)):
         f.write('ERROR\n')
+    #check that there are no spaces in the input
+    elif (' ' in times_str.minute[i.Index] or ' ' in times_str.hour[i.Index]):
+        f.write('ERROR\n')
     #check to ensure a properly formatted minute was inpputted (nothing like 3:3 instead of 3:03)
-    elif (len(times_str.minute[i.Index]) != 2):
+    elif ((len(times_str.minute[i.Index]) != 2)):
         f.write('ERROR\n')
     #check to ensure the input is within the bounds of time
     elif(i.hour > 23 or i.minute > 59):
@@ -65,6 +63,5 @@ for i in times.itertuples():
         angle.set_hour(i.hour)
         f.write(str(angle.get_angle()))
         f.write('\n')
-In [10]:
-
+        
 f.close()
